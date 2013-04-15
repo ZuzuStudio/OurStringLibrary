@@ -14,7 +14,6 @@ public:
     ~String();
 
     int length();
-    int length(const char *str);
     String substr(int first, int n);
 
     String &operator=(const String &original);

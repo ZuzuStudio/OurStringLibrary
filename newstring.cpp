@@ -1,5 +1,7 @@
 #include "newstring.h"
 
+int length(const char *str);
+
 String::String():
     size(0), array(0)
 {
@@ -13,7 +15,7 @@ String::String(int n):
 
 //
 String::String(const char *str):
-    size(length(str)), array(0)
+    size(::length(str)), array(0)
 {
     array=new char[size];
     for(int i=0; i<size; ++i)
@@ -38,7 +40,7 @@ String::~String()
 
 ////////////////////////////////////////////////////////////
 
-int String::length(const char *str)
+int length(const char *str)
 {
     int length=0;
     for(int i=0; str[i]; ++i)
