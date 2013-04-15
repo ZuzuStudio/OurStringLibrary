@@ -53,7 +53,7 @@ int String::length()
 
 String String::substr(int pos, int n)
 {
-    String substr(n);
+    String substr(size-pos);
     for(int i=0, j=pos; i<substr.size && j<size; ++i, ++j)
     substr.array[i]=array[j];
     return substr;
