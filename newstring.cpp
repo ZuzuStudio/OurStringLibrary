@@ -11,9 +11,11 @@ String::String(int n):
     size(n), array(0)
 {
     array=new char[size];
+    for (int i=0; i<size; ++i)
+        array[i]='\0';
 };
 
-//
+
 String::String(const char *str):
     size(::length(str)), array(0)
 {
@@ -21,7 +23,7 @@ String::String(const char *str):
     for(int i=0; i<size; ++i)
         array[i]=str[i];
 };
-//
+
 
 String::String(const String &original):
     size(original.size), array(0)
@@ -35,6 +37,7 @@ String::~String()
 {
     for(int i=0; i<size; ++i)
         array[i]=0;
+    delete []array;
     array=0;
 };
 
@@ -45,36 +48,57 @@ int length(const char *str)
     int length=0;
     for(int i=0; str[i]; ++i)
         ++length;
-    return length;
+    return ++length;
 }
 
 int String::length()
 {
-    return size;
+    int length=size-1;
+    return length;
 }
 
 String String::substr(int pos, int n)
 {
-    String substr(size-pos);
-    for(int i=0, j=pos; i<substr.size && j<size; ++i, ++j)
-    substr.array[i]=array[j];
-    return substr;
 
+    int length=0;
+    if(pos+n<size)
+        length=n+1;
+    else
+        length=size-pos;
+
+    String substr(length);
+
+    for(int i=0, j=pos; i<substr.size-1; ++i, ++j)
+        substr.array[i]=array[j];
+    return substr;
+}
+
+char* String::c_str()
+{
+    char *c_str = new char[size];
+    for(int i=0; i<size; ++i)
+        c_str[i]=array[i];
+    return c_str;
 }
 
 ////////////////////////////////////////////////////////////
 
-String String::operator+(String x)
+String String::operator+(String &x)
 {
-    String y(size+x.size);
 
-    for(int i=0; i<size; ++i)
-        y.array[i]=array[i];
+    String y(size+x.size-1);
 
-    for(int i=size, j=0; i<size+x.size; ++i, ++j)
+    if (size>0)
     {
-        y.array[i]=x.array[j];
+        for(int i=0; i<size; ++i)
+            y.array[i]=array[i];
+        for(int i=size-1, j=0; i<y.size; ++i, ++j)
+            y.array[i]=x.array[j];
     }
+    else
+        for(int i=size, j=0; i<y.size; ++i, ++j)
+            y.array[i]=x.array[j];
+
     return y;
 };
 
@@ -82,16 +106,19 @@ String &String::operator=(const String &original)
 {
     if( this == &original )
         return *this;
-    delete []array;
-    size=original.size;
-    array= new char [size];
+
+    if(size!=original.size)
+    {
+        delete []array;
+        size=original.size;
+        array= new char [size];
+    }
     for(int i=0; i<size; ++i)
         array[i]=original.array[i];
     return *this;
-
 };
 
-bool String::operator==(String x)
+bool String::operator==(String &x)
 {
     if (size!=x.size)
         return false;
@@ -104,24 +131,26 @@ bool String::operator==(String x)
         return true;
     }
 };
+
 ////////////////////////////////
-bool String::operator>=(String x)
+
+bool String::operator>=(String &x)
 {
     int total=size>x.size?size:x.size;
     for(int i=0; i<total; )
     {
-         if(array[i]>x.array[i])
+        if(array[i]>x.array[i])
             return true;
         if(array[i]==x.array[i])
             ++i;
         else if(array[i]<x.array[i])
             return false;
-            else ++i;
+        else ++i;
     }
     return true;
 };
 
-bool String::operator<=(String x)
+bool String::operator<=(String &x)
 {
     int total=size>x.size?size:x.size;
     for(int i=0; i<total; )
@@ -136,7 +165,7 @@ bool String::operator<=(String x)
     return true;
 };
 
-bool String::operator>(String x)
+bool String::operator>(String &x)
 {
     int total=size>x.size?size:x.size;
     for(int i=0; i<total-1; )
@@ -151,7 +180,7 @@ bool String::operator>(String x)
     return array[total]==x.array[total]?false:true;
 };
 
-bool String::operator<(String x)
+bool String::operator<(String &x)
 {
     int total=size>x.size?size:x.size;
     for(int i=0; i<total; )
@@ -166,16 +195,16 @@ bool String::operator<(String x)
     return array[total]==x.array[total]?false:true;
 };
 
-std::ostream &operator<<(std::ostream &output, const String &a)
+std::ostream &operator<<(std::ostream &output, const String &x)
 {
-    for (int i=0; i<a.size; ++i)
-        output<<a.array[i];
+    for (int i=0; x.array[i]; ++i)
+        output<<x.array[i];
     return output;
 };
 
-std::istream  &operator>>(std::istream &input, const String &a)
+std::istream  &operator>>(std::istream &input, const String &x)
 {
-    for(int i=0; i<a.size; ++i)
-        input>>a.array[i];
+    for(int i=0; i<x.size-1; ++i)
+        input>>x.array[i];
     return input;
 };

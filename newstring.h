@@ -9,24 +9,25 @@ class String
 public:
     String();
     String(int n);
-    String(const char *str);
+    explicit String(const char *str);
     String(const String &original);
     ~String();
 
     int length();
     String substr(int first, int n);
+    char *c_str();
 
     String &operator=(const String &original);
-    String operator+(String x);
+    String operator+(String &x);
 
-    bool operator==(String x);
-    bool operator>=(String x);
-    bool operator<=(String x);
-    bool operator>(String x);
-    bool operator<(String x);
-    void operator<<(String x);
-    friend std::ostream &operator<<(std::ostream &output, const String &a);
-    friend std::istream &operator>>(std::istream &input, const String &a);
+    bool operator==(String &x);
+    bool operator>=(String &x);
+    bool operator<=(String &x);
+    bool operator>(String &x);
+    bool operator<(String &x);
+    void operator<<(String &x);
+    friend std::ostream &operator<<(std::ostream &output, const String &x);
+    friend std::istream &operator>>(std::istream &input, const String &x);
 
 private:
     int size;
