@@ -18,7 +18,7 @@ public:
     char *c_str();
 
     String &operator=(const String &original);
-    String operator+(String &x);
+    String operator+(const String &x);
 
     bool operator==(String &x);
     bool operator>=(String &x);

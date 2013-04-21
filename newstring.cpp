@@ -83,7 +83,7 @@ char* String::c_str()
 
 ////////////////////////////////////////////////////////////
 
-String String::operator+(String &x)
+String String::operator+(const String &x)
 {
 
     String y(size+x.size-1);
@@ -177,7 +177,7 @@ bool String::operator>(String &x)
         else if(array[i]<x.array[i])
             return false;
     }
-    return array[total]==x.array[total]?false:true;
+    return !array[total]==x.array[total];
 };
 
 bool String::operator<(String &x)
